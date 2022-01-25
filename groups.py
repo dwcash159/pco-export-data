@@ -14,7 +14,7 @@ class groups:
     while 'next' in links:
       groups_next = api().get(links["next"])
       links = groups_next["links"]
-      groups["data"] = groups["data"] + groups["data"]
+      groups["data"] = groups["data"] + groups_next["data"]
 
     print("Number of groups %s" % len(groups["data"]))
 
