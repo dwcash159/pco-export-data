@@ -8,7 +8,17 @@ class groups:
   def __init__(self, grpId):
     self.groupId = grpId
   def getAll(self):
-    return api().get('%s?per_page=1&offset=5' % (self.groupUrl))
+    groups = api().get('%s?per_page=100' % (self.groupUrl))
+    links = groups["links"]
+
+    while 'next' in links:
+      groups_next = api().get(links["next"])
+      links = groups_next["links"]
+      groups["data"] = groups["data"] + groups["data"]
+
+    print("Number of groups %s" % len(groups["data"]))
+
+    return groups
   def getDetails(self):
     resp = api().get('%s/%s' % (self.groupUrl, self.groupId))
     self.locationUrl = resp["data"]["links"]["location"]
