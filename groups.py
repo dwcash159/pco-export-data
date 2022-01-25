@@ -8,13 +8,23 @@ class groups:
   def __init__(self, grpId):
     self.groupId = grpId
   def getAll(self):
-    return api().get('%s?per_page=20&offsetx=200' % (self.groupUrl))
+    return api().get('%s?per_page=1&offset=5' % (self.groupUrl))
   def getDetails(self):
     resp = api().get('%s/%s' % (self.groupUrl, self.groupId))
     self.locationUrl = resp["data"]["links"]["location"]
     return resp
   def getMembers(self):
-    return api().get('%s/%s/memberships?per_page=100000' % (self.groupUrl, self.groupId))
+    memberships = api().get('%s/%s/memberships?per_page=100' % (self.groupUrl, self.groupId))
+    links = memberships["links"]
+
+    while 'next' in links:
+      memberships_next = api().get(links["next"])
+      links = memberships_next["links"]
+      memberships["data"] = memberships["data"] + memberships_next["data"]
+
+    print("Number of members %s" % len(memberships["data"]))
+
+    return memberships
   def getLocation(self):
     if self.locationUrl == None:
       return None

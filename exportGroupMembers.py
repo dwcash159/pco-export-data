@@ -10,14 +10,14 @@ from geopy import distance
 
 outputFile = open("groupsExport.csv", "w+")
 # add new columns to csvHeader AND update the number of columns in csvPlaceholder
-csvHeader = "ID, First Name, Last Name, Email, Phone, Gender, Birthdate, City, State, Zip, Location Long, Location Lat, Distance to Group, Marital Status, Membership, Status, Person Record Updated, Person Record Created, Joined Group At, Role, Group, Group Location, Group Long, Group Lat\r\n"
-csvPlaceholder = ("\"%s\"," * 24) + "\r\n"
+csvHeader = "ID, First Name, Last Name, Email, Phone, Gender, Birthdate, City, State, Zip, Location Long, Location Lat, Distance to Group, Marital Status, Membership, Status, Person Record Updated, Person Record Created, Joined Group At, Role, Group ID, Group, Group Location, Group Long, Group Lat\r\n"
+csvPlaceholder = ("\"%s\"," * 25) + "\r\n"
 outputFile.write(csvHeader)
 
 groupsList = groups('').getAll()
 
 for grp in groupsList["data"]:
-    time.sleep(7)  # slowing down API calls to not exceed rates of 100 in 20s
+    time.sleep(6)  # slowing down API calls to not exceed rates of 100 in 20s
     print(grp["attributes"]["name"])
     groupObj = groups(grp["id"])
     groupDetail = groupObj.getDetails()
@@ -27,7 +27,6 @@ for grp in groupsList["data"]:
         groupAddress = grpLocation["data"]["attributes"]["full_formatted_address"].replace("\n", ", ")
         groupLong = grpLocation["data"]["attributes"]["longitude"]
         groupLat = grpLocation["data"]["attributes"]["latitude"]
-        print(grpLocation["data"]["attributes"]["latitude"])
     else:
         groupAddress = ""
         groupLong = ""
@@ -36,7 +35,7 @@ for grp in groupsList["data"]:
     for member in members["data"]:
         # try:
         print("    %s %s" % (member["attributes"]["first_name"], member["attributes"]["last_name"]))
-        time.sleep(4)  # a little more slow down
+        time.sleep(1.25)  # a little more slow down
         personObj = people(member["attributes"]["account_center_identifier"])
         person = personObj.getPerson()
         maritalStatus = personObj.getMaritalStatus()
@@ -50,8 +49,6 @@ for grp in groupsList["data"]:
             phone = member["attributes"]["phone_number"]
         except:
             phone = ""
-
-        print(phone)
 
         if addresses != None and len(addresses["data"]) > 0:
             address = addresses["data"][0]
@@ -88,6 +85,7 @@ for grp in groupsList["data"]:
             person["data"]["attributes"]["created_at"],
             member["attributes"]["joined_at"],
             member["attributes"]["role"],
+            grp["id"],
             groupDetail["data"]["attributes"]["name"],
             groupAddress,
             groupLong,
