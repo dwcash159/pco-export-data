@@ -35,7 +35,7 @@ for group_idx, grp in enumerate(groupsList["data"]):
     for member_idx, member in enumerate(members["data"]):
         # try:
         print("    Member Index: %s %s %s" % (member_idx, member["attributes"]["first_name"], member["attributes"]["last_name"]))
-        time.sleep(1.25)  # a little more slow down
+        time.sleep(1.75)  # a little more slow down
         personObj = people(member["attributes"]["account_center_identifier"])
         person = personObj.getPerson()
         maritalStatus = personObj.getMaritalStatus()
