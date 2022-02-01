@@ -17,7 +17,7 @@ outputFile.write(csvHeader)
 groupsList = groups('').getAll()
 
 for group_idx, grp in enumerate(groupsList["data"]):
-    time.sleep(6)  # slowing down API calls to not exceed rates of 100 in 20s
+    time.sleep(3)  # slowing down API calls to not exceed rates of 100 in 20s
     print("Group Index: %s - %s" % (group_idx, grp["attributes"]["name"]))
     groupObj = groups(grp["id"])
     groupDetail = groupObj.getDetails()
@@ -35,7 +35,7 @@ for group_idx, grp in enumerate(groupsList["data"]):
     for member_idx, member in enumerate(members["data"]):
         # try:
         print("    Member Index: %s %s %s" % (member_idx, member["attributes"]["first_name"], member["attributes"]["last_name"]))
-        time.sleep(1.75)  # a little more slow down
+        time.sleep(1.00)  # a little more slow down
         personObj = people(member["attributes"]["account_center_identifier"])
         person = personObj.getPerson()
         maritalStatus = personObj.getMaritalStatus()
